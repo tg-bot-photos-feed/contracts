@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package utbot;
+
+option go_package = "github.com/tg-bot-photos-feed/contracts";
+
+message AuthRequest {
+    string login = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    string access_token = 1;
+    string id_token = 2;
+    int64 expires_in = 3;
+    int64 refresh_expires_in = 4;
+    string refresh_token = 5;
+    string token_type = 6;
+    int64 not_before_policy = 7;
+    string session_state = 8;
+    string scope = 9;
+}
+
+service AuthService {
+    rpc Auth (AuthRequest) returns (LoginResponse);
+
+}

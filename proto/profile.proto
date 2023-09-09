@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package utbot;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/tg-bot-photos-feed/contracts";
+
+message MyProfileResponse {
+    string id = 1;
+    string telegram_user_id = 2;
+    string telegram_user_name = 3;
+    string name = 4;
+    string picture = 5;
+}
+
+service ProfileService {
+    rpc Me (google.protobuf.Empty) returns (MyProfileResponse);
+}
