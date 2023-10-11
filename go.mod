@@ -3,7 +3,7 @@ module github.com/tg-bot-photos-feed/contracts
 go 1.19
 
 require (
-	google.golang.org/grpc v1.58.0
+	google.golang.org/grpc v1.58.3
 	google.golang.org/protobuf v1.31.0
 )
 
