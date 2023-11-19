@@ -11,7 +11,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -29,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
 	Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*LoginResponse, error)
-	SingUp(ctx context.Context, in *SingUpRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	SingUp(ctx context.Context, in *SingUpRequest, opts ...grpc.CallOption) (*SingUpResponse, error)
 }
 
 type authServiceClient struct {
@@ -49,8 +48,8 @@ func (c *authServiceClient) Auth(ctx context.Context, in *AuthRequest, opts ...g
 	return out, nil
 }
 
-func (c *authServiceClient) SingUp(ctx context.Context, in *SingUpRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
+func (c *authServiceClient) SingUp(ctx context.Context, in *SingUpRequest, opts ...grpc.CallOption) (*SingUpResponse, error) {
+	out := new(SingUpResponse)
 	err := c.cc.Invoke(ctx, AuthService_SingUp_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -63,7 +62,7 @@ func (c *authServiceClient) SingUp(ctx context.Context, in *SingUpRequest, opts 
 // for forward compatibility
 type AuthServiceServer interface {
 	Auth(context.Context, *AuthRequest) (*LoginResponse, error)
-	SingUp(context.Context, *SingUpRequest) (*emptypb.Empty, error)
+	SingUp(context.Context, *SingUpRequest) (*SingUpResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -74,7 +73,7 @@ type UnimplementedAuthServiceServer struct {
 func (UnimplementedAuthServiceServer) Auth(context.Context, *AuthRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Auth not implemented")
 }
-func (UnimplementedAuthServiceServer) SingUp(context.Context, *SingUpRequest) (*emptypb.Empty, error) {
+func (UnimplementedAuthServiceServer) SingUp(context.Context, *SingUpRequest) (*SingUpResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SingUp not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
