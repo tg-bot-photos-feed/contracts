@@ -20,8 +20,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ProfileService_Me_FullMethodName             = "/utbot.ProfileService/Me"
-	ProfileService_SetMasterToken_FullMethodName = "/utbot.ProfileService/SetMasterToken"
+	ProfileService_Me_FullMethodName                    = "/utbot.ProfileService/Me"
+	ProfileService_SetMasterToken_FullMethodName        = "/utbot.ProfileService/SetMasterToken"
+	ProfileService_PrepareSandboxAccount_FullMethodName = "/utbot.ProfileService/PrepareSandboxAccount"
 )
 
 // ProfileServiceClient is the client API for ProfileService service.
@@ -30,6 +31,7 @@ const (
 type ProfileServiceClient interface {
 	Me(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*MyProfileResponse, error)
 	SetMasterToken(ctx context.Context, in *SetMasterTokenRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	PrepareSandboxAccount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type profileServiceClient struct {
@@ -58,12 +60,22 @@ func (c *profileServiceClient) SetMasterToken(ctx context.Context, in *SetMaster
 	return out, nil
 }
 
+func (c *profileServiceClient) PrepareSandboxAccount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, ProfileService_PrepareSandboxAccount_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProfileServiceServer is the server API for ProfileService service.
 // All implementations must embed UnimplementedProfileServiceServer
 // for forward compatibility
 type ProfileServiceServer interface {
 	Me(context.Context, *emptypb.Empty) (*MyProfileResponse, error)
 	SetMasterToken(context.Context, *SetMasterTokenRequest) (*emptypb.Empty, error)
+	PrepareSandboxAccount(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedProfileServiceServer()
 }
 
@@ -76,6 +88,9 @@ func (UnimplementedProfileServiceServer) Me(context.Context, *emptypb.Empty) (*M
 }
 func (UnimplementedProfileServiceServer) SetMasterToken(context.Context, *SetMasterTokenRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetMasterToken not implemented")
+}
+func (UnimplementedProfileServiceServer) PrepareSandboxAccount(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PrepareSandboxAccount not implemented")
 }
 func (UnimplementedProfileServiceServer) mustEmbedUnimplementedProfileServiceServer() {}
 
@@ -126,6 +141,24 @@ func _ProfileService_SetMasterToken_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProfileService_PrepareSandboxAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProfileServiceServer).PrepareSandboxAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProfileService_PrepareSandboxAccount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProfileServiceServer).PrepareSandboxAccount(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProfileService_ServiceDesc is the grpc.ServiceDesc for ProfileService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -140,6 +173,10 @@ var ProfileService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetMasterToken",
 			Handler:    _ProfileService_SetMasterToken_Handler,
+		},
+		{
+			MethodName: "PrepareSandboxAccount",
+			Handler:    _ProfileService_PrepareSandboxAccount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
