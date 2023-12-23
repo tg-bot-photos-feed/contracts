@@ -24,11 +24,15 @@ message PositionsSecurities {
 	string instrument_type = 16; //Тип инструмента.
 }
 
+message PositionReportRequest {
+	string account_id = 1;
+}
+
 message PositionReportResponse {
 	repeated PositionsSecurities securities = 1;
 }
 
 service OperationsService {
 	rpc BuyByMarket (BuyByMarketRequest) returns (google.protobuf.Empty);
-	rpc PositionReport(google.protobuf.Empty) returns (PositionReportResponse);
+	rpc PositionReport(PositionReportRequest) returns (PositionReportResponse);
 }

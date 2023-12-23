@@ -29,7 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OperationsServiceClient interface {
 	BuyByMarket(ctx context.Context, in *BuyByMarketRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	PositionReport(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*PositionReportResponse, error)
+	PositionReport(ctx context.Context, in *PositionReportRequest, opts ...grpc.CallOption) (*PositionReportResponse, error)
 }
 
 type operationsServiceClient struct {
@@ -49,7 +49,7 @@ func (c *operationsServiceClient) BuyByMarket(ctx context.Context, in *BuyByMark
 	return out, nil
 }
 
-func (c *operationsServiceClient) PositionReport(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*PositionReportResponse, error) {
+func (c *operationsServiceClient) PositionReport(ctx context.Context, in *PositionReportRequest, opts ...grpc.CallOption) (*PositionReportResponse, error) {
 	out := new(PositionReportResponse)
 	err := c.cc.Invoke(ctx, OperationsService_PositionReport_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -63,7 +63,7 @@ func (c *operationsServiceClient) PositionReport(ctx context.Context, in *emptyp
 // for forward compatibility
 type OperationsServiceServer interface {
 	BuyByMarket(context.Context, *BuyByMarketRequest) (*emptypb.Empty, error)
-	PositionReport(context.Context, *emptypb.Empty) (*PositionReportResponse, error)
+	PositionReport(context.Context, *PositionReportRequest) (*PositionReportResponse, error)
 	mustEmbedUnimplementedOperationsServiceServer()
 }
 
@@ -74,7 +74,7 @@ type UnimplementedOperationsServiceServer struct {
 func (UnimplementedOperationsServiceServer) BuyByMarket(context.Context, *BuyByMarketRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BuyByMarket not implemented")
 }
-func (UnimplementedOperationsServiceServer) PositionReport(context.Context, *emptypb.Empty) (*PositionReportResponse, error) {
+func (UnimplementedOperationsServiceServer) PositionReport(context.Context, *PositionReportRequest) (*PositionReportResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PositionReport not implemented")
 }
 func (UnimplementedOperationsServiceServer) mustEmbedUnimplementedOperationsServiceServer() {}
@@ -109,7 +109,7 @@ func _OperationsService_BuyByMarket_Handler(srv interface{}, ctx context.Context
 }
 
 func _OperationsService_PositionReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+	in := new(PositionReportRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -121,7 +121,7 @@ func _OperationsService_PositionReport_Handler(srv interface{}, ctx context.Cont
 		FullMethod: OperationsService_PositionReport_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OperationsServiceServer).PositionReport(ctx, req.(*emptypb.Empty))
+		return srv.(OperationsServiceServer).PositionReport(ctx, req.(*PositionReportRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
