@@ -31,7 +31,7 @@ const (
 type ProfileServiceClient interface {
 	Me(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*MyProfileResponse, error)
 	SetMasterToken(ctx context.Context, in *SetMasterTokenRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	PrepareSandboxAccount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	PrepareSandboxAccount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*PrepareSandboxAccountResponse, error)
 }
 
 type profileServiceClient struct {
@@ -60,8 +60,8 @@ func (c *profileServiceClient) SetMasterToken(ctx context.Context, in *SetMaster
 	return out, nil
 }
 
-func (c *profileServiceClient) PrepareSandboxAccount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
+func (c *profileServiceClient) PrepareSandboxAccount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*PrepareSandboxAccountResponse, error) {
+	out := new(PrepareSandboxAccountResponse)
 	err := c.cc.Invoke(ctx, ProfileService_PrepareSandboxAccount_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -75,7 +75,7 @@ func (c *profileServiceClient) PrepareSandboxAccount(ctx context.Context, in *em
 type ProfileServiceServer interface {
 	Me(context.Context, *emptypb.Empty) (*MyProfileResponse, error)
 	SetMasterToken(context.Context, *SetMasterTokenRequest) (*emptypb.Empty, error)
-	PrepareSandboxAccount(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
+	PrepareSandboxAccount(context.Context, *emptypb.Empty) (*PrepareSandboxAccountResponse, error)
 	mustEmbedUnimplementedProfileServiceServer()
 }
 
@@ -89,7 +89,7 @@ func (UnimplementedProfileServiceServer) Me(context.Context, *emptypb.Empty) (*M
 func (UnimplementedProfileServiceServer) SetMasterToken(context.Context, *SetMasterTokenRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetMasterToken not implemented")
 }
-func (UnimplementedProfileServiceServer) PrepareSandboxAccount(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
+func (UnimplementedProfileServiceServer) PrepareSandboxAccount(context.Context, *emptypb.Empty) (*PrepareSandboxAccountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PrepareSandboxAccount not implemented")
 }
 func (UnimplementedProfileServiceServer) mustEmbedUnimplementedProfileServiceServer() {}
