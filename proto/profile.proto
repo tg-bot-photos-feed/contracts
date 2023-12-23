@@ -7,28 +7,29 @@ import "google/protobuf/empty.proto";
 option go_package = "github.com/tg-bot-photos-feed/contracts";
 
 message MyProfileResponse {
-    string id = 1;
-    string telegram_user_id = 2;
-    string telegram_user_name = 3;
-    string name = 4;
-    string picture = 5;
+	string id = 1;
+	string telegram_user_id = 2;
+	string telegram_user_name = 3;
+	string name = 4;
+	string picture = 5;
 }
 
 
 message SetMasterTokenRequest {
-    string token = 1;
+	string token = 1;
 }
 
-message PrepareSandboxAccountRequest{
-    string token = 1;
+message PrepareSandboxAccountRequest {
+	string token = 1;
+	int64 units = 2;
 }
 
-message PrepareSandboxAccountResponse{
-    string account_id = 1;
+message PrepareSandboxAccountResponse {
+	string account_id = 1;
 }
 
 service ProfileService {
-    rpc Me (google.protobuf.Empty) returns (MyProfileResponse);
-    rpc SetMasterToken (SetMasterTokenRequest) returns (google.protobuf.Empty);
-    rpc PrepareSandboxAccount (PrepareSandboxAccountRequest) returns (PrepareSandboxAccountResponse);
+	rpc Me (google.protobuf.Empty) returns (MyProfileResponse);
+	rpc SetMasterToken (SetMasterTokenRequest) returns (google.protobuf.Empty);
+	rpc PrepareSandboxAccount (PrepareSandboxAccountRequest) returns (PrepareSandboxAccountResponse);
 }
