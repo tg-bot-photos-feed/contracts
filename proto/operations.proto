@@ -12,6 +12,6 @@ message BuyByMarketRequest {
 	string account_id = 3;
 }
 
-service Operations {
+service OperationsService {
 	rpc BuyByMarket (BuyByMarketRequest) returns (google.protobuf.Empty);
 }

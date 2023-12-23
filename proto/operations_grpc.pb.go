@@ -20,89 +20,89 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Operations_BuyByMarket_FullMethodName = "/utbot.Operations/BuyByMarket"
+	OperationsService_BuyByMarket_FullMethodName = "/utbot.OperationsService/BuyByMarket"
 )
 
-// OperationsClient is the client API for Operations service.
+// OperationsServiceClient is the client API for OperationsService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type OperationsClient interface {
+type OperationsServiceClient interface {
 	BuyByMarket(ctx context.Context, in *BuyByMarketRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
-type operationsClient struct {
+type operationsServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewOperationsClient(cc grpc.ClientConnInterface) OperationsClient {
-	return &operationsClient{cc}
+func NewOperationsServiceClient(cc grpc.ClientConnInterface) OperationsServiceClient {
+	return &operationsServiceClient{cc}
 }
 
-func (c *operationsClient) BuyByMarket(ctx context.Context, in *BuyByMarketRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *operationsServiceClient) BuyByMarket(ctx context.Context, in *BuyByMarketRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, Operations_BuyByMarket_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, OperationsService_BuyByMarket_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// OperationsServer is the server API for Operations service.
-// All implementations must embed UnimplementedOperationsServer
+// OperationsServiceServer is the server API for OperationsService service.
+// All implementations must embed UnimplementedOperationsServiceServer
 // for forward compatibility
-type OperationsServer interface {
+type OperationsServiceServer interface {
 	BuyByMarket(context.Context, *BuyByMarketRequest) (*emptypb.Empty, error)
-	mustEmbedUnimplementedOperationsServer()
+	mustEmbedUnimplementedOperationsServiceServer()
 }
 
-// UnimplementedOperationsServer must be embedded to have forward compatible implementations.
-type UnimplementedOperationsServer struct {
+// UnimplementedOperationsServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedOperationsServiceServer struct {
 }
 
-func (UnimplementedOperationsServer) BuyByMarket(context.Context, *BuyByMarketRequest) (*emptypb.Empty, error) {
+func (UnimplementedOperationsServiceServer) BuyByMarket(context.Context, *BuyByMarketRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BuyByMarket not implemented")
 }
-func (UnimplementedOperationsServer) mustEmbedUnimplementedOperationsServer() {}
+func (UnimplementedOperationsServiceServer) mustEmbedUnimplementedOperationsServiceServer() {}
 
-// UnsafeOperationsServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to OperationsServer will
+// UnsafeOperationsServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to OperationsServiceServer will
 // result in compilation errors.
-type UnsafeOperationsServer interface {
-	mustEmbedUnimplementedOperationsServer()
+type UnsafeOperationsServiceServer interface {
+	mustEmbedUnimplementedOperationsServiceServer()
 }
 
-func RegisterOperationsServer(s grpc.ServiceRegistrar, srv OperationsServer) {
-	s.RegisterService(&Operations_ServiceDesc, srv)
+func RegisterOperationsServiceServer(s grpc.ServiceRegistrar, srv OperationsServiceServer) {
+	s.RegisterService(&OperationsService_ServiceDesc, srv)
 }
 
-func _Operations_BuyByMarket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _OperationsService_BuyByMarket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(BuyByMarketRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(OperationsServer).BuyByMarket(ctx, in)
+		return srv.(OperationsServiceServer).BuyByMarket(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Operations_BuyByMarket_FullMethodName,
+		FullMethod: OperationsService_BuyByMarket_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OperationsServer).BuyByMarket(ctx, req.(*BuyByMarketRequest))
+		return srv.(OperationsServiceServer).BuyByMarket(ctx, req.(*BuyByMarketRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Operations_ServiceDesc is the grpc.ServiceDesc for Operations service.
+// OperationsService_ServiceDesc is the grpc.ServiceDesc for OperationsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Operations_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "utbot.Operations",
-	HandlerType: (*OperationsServer)(nil),
+var OperationsService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "utbot.OperationsService",
+	HandlerType: (*OperationsServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "BuyByMarket",
-			Handler:    _Operations_BuyByMarket_Handler,
+			Handler:    _OperationsService_BuyByMarket_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
