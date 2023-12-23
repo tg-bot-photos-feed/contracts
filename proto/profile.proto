@@ -19,6 +19,10 @@ message SetMasterTokenRequest {
     string token = 1;
 }
 
+message PrepareSandboxAccountRequest{
+    string token = 1;
+}
+
 message PrepareSandboxAccountResponse{
     string account_id = 1;
 }
@@ -26,5 +30,5 @@ message PrepareSandboxAccountResponse{
 service ProfileService {
     rpc Me (google.protobuf.Empty) returns (MyProfileResponse);
     rpc SetMasterToken (SetMasterTokenRequest) returns (google.protobuf.Empty);
-    rpc PrepareSandboxAccount (google.protobuf.Empty) returns (PrepareSandboxAccountResponse);
+    rpc PrepareSandboxAccount (PrepareSandboxAccountRequest) returns (PrepareSandboxAccountResponse);
 }
