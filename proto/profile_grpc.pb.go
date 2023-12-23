@@ -21,7 +21,6 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	ProfileService_Me_FullMethodName             = "/utbot.ProfileService/Me"
-	ProfileService_SetAvatar_FullMethodName      = "/utbot.ProfileService/SetAvatar"
 	ProfileService_SetMasterToken_FullMethodName = "/utbot.ProfileService/SetMasterToken"
 )
 
@@ -30,7 +29,6 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProfileServiceClient interface {
 	Me(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*MyProfileResponse, error)
-	SetAvatar(ctx context.Context, in *SetAvatarRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SetMasterToken(ctx context.Context, in *SetMasterTokenRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -51,15 +49,6 @@ func (c *profileServiceClient) Me(ctx context.Context, in *emptypb.Empty, opts .
 	return out, nil
 }
 
-func (c *profileServiceClient) SetAvatar(ctx context.Context, in *SetAvatarRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, ProfileService_SetAvatar_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *profileServiceClient) SetMasterToken(ctx context.Context, in *SetMasterTokenRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, ProfileService_SetMasterToken_FullMethodName, in, out, opts...)
@@ -74,7 +63,6 @@ func (c *profileServiceClient) SetMasterToken(ctx context.Context, in *SetMaster
 // for forward compatibility
 type ProfileServiceServer interface {
 	Me(context.Context, *emptypb.Empty) (*MyProfileResponse, error)
-	SetAvatar(context.Context, *SetAvatarRequest) (*emptypb.Empty, error)
 	SetMasterToken(context.Context, *SetMasterTokenRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedProfileServiceServer()
 }
@@ -85,9 +73,6 @@ type UnimplementedProfileServiceServer struct {
 
 func (UnimplementedProfileServiceServer) Me(context.Context, *emptypb.Empty) (*MyProfileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Me not implemented")
-}
-func (UnimplementedProfileServiceServer) SetAvatar(context.Context, *SetAvatarRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetAvatar not implemented")
 }
 func (UnimplementedProfileServiceServer) SetMasterToken(context.Context, *SetMasterTokenRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetMasterToken not implemented")
@@ -123,24 +108,6 @@ func _ProfileService_Me_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ProfileService_SetAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetAvatarRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProfileServiceServer).SetAvatar(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ProfileService_SetAvatar_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProfileServiceServer).SetAvatar(ctx, req.(*SetAvatarRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _ProfileService_SetMasterToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetMasterTokenRequest)
 	if err := dec(in); err != nil {
@@ -169,10 +136,6 @@ var ProfileService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Me",
 			Handler:    _ProfileService_Me_Handler,
-		},
-		{
-			MethodName: "SetAvatar",
-			Handler:    _ProfileService_SetAvatar_Handler,
 		},
 		{
 			MethodName: "SetMasterToken",

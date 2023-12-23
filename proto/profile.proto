@@ -14,9 +14,6 @@ message MyProfileResponse {
     string picture = 5;
 }
 
-message SetAvatarRequest {
-    string avatar_uri = 1;
-}
 
 message SetMasterTokenRequest {
     string token = 1;
@@ -24,6 +21,5 @@ message SetMasterTokenRequest {
 
 service ProfileService {
     rpc Me (google.protobuf.Empty) returns (MyProfileResponse);
-    rpc SetAvatar (SetAvatarRequest) returns (google.protobuf.Empty);
     rpc SetMasterToken (SetMasterTokenRequest) returns (google.protobuf.Empty);
 }

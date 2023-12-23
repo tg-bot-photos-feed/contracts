@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package utbot;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/tg-bot-photos-feed/contracts";
+
+message BuyByMarketRequest {
+	int64 quantity = 1;
+	int64 instrument_id = 2;
+}
+
+service Operations{
+	rpc BuyByMarket (BuyByMarketRequest) returns (google.protobuf.Empty);
+}
