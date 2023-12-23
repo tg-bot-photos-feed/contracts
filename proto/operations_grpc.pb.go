@@ -29,7 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OperationsServiceClient interface {
 	BuyByMarket(ctx context.Context, in *BuyByMarketRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	PositionReport(ctx context.Context, in *PositionReportRequest, opts ...grpc.CallOption) (*PositionReportResponse, error)
+	PositionReport(ctx context.Context, in *PositionReportRequest, opts ...grpc.CallOption) (OperationsService_PositionReportClient, error)
 }
 
 type operationsServiceClient struct {
@@ -49,13 +49,36 @@ func (c *operationsServiceClient) BuyByMarket(ctx context.Context, in *BuyByMark
 	return out, nil
 }
 
-func (c *operationsServiceClient) PositionReport(ctx context.Context, in *PositionReportRequest, opts ...grpc.CallOption) (*PositionReportResponse, error) {
-	out := new(PositionReportResponse)
-	err := c.cc.Invoke(ctx, OperationsService_PositionReport_FullMethodName, in, out, opts...)
+func (c *operationsServiceClient) PositionReport(ctx context.Context, in *PositionReportRequest, opts ...grpc.CallOption) (OperationsService_PositionReportClient, error) {
+	stream, err := c.cc.NewStream(ctx, &OperationsService_ServiceDesc.Streams[0], OperationsService_PositionReport_FullMethodName, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &operationsServicePositionReportClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type OperationsService_PositionReportClient interface {
+	Recv() (*PositionReportResponse, error)
+	grpc.ClientStream
+}
+
+type operationsServicePositionReportClient struct {
+	grpc.ClientStream
+}
+
+func (x *operationsServicePositionReportClient) Recv() (*PositionReportResponse, error) {
+	m := new(PositionReportResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 // OperationsServiceServer is the server API for OperationsService service.
@@ -63,7 +86,7 @@ func (c *operationsServiceClient) PositionReport(ctx context.Context, in *Positi
 // for forward compatibility
 type OperationsServiceServer interface {
 	BuyByMarket(context.Context, *BuyByMarketRequest) (*emptypb.Empty, error)
-	PositionReport(context.Context, *PositionReportRequest) (*PositionReportResponse, error)
+	PositionReport(*PositionReportRequest, OperationsService_PositionReportServer) error
 	mustEmbedUnimplementedOperationsServiceServer()
 }
 
@@ -74,8 +97,8 @@ type UnimplementedOperationsServiceServer struct {
 func (UnimplementedOperationsServiceServer) BuyByMarket(context.Context, *BuyByMarketRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BuyByMarket not implemented")
 }
-func (UnimplementedOperationsServiceServer) PositionReport(context.Context, *PositionReportRequest) (*PositionReportResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PositionReport not implemented")
+func (UnimplementedOperationsServiceServer) PositionReport(*PositionReportRequest, OperationsService_PositionReportServer) error {
+	return status.Errorf(codes.Unimplemented, "method PositionReport not implemented")
 }
 func (UnimplementedOperationsServiceServer) mustEmbedUnimplementedOperationsServiceServer() {}
 
@@ -108,22 +131,25 @@ func _OperationsService_BuyByMarket_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _OperationsService_PositionReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PositionReportRequest)
-	if err := dec(in); err != nil {
-		return nil, err
+func _OperationsService_PositionReport_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(PositionReportRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	if interceptor == nil {
-		return srv.(OperationsServiceServer).PositionReport(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: OperationsService_PositionReport_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OperationsServiceServer).PositionReport(ctx, req.(*PositionReportRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	return srv.(OperationsServiceServer).PositionReport(m, &operationsServicePositionReportServer{stream})
+}
+
+type OperationsService_PositionReportServer interface {
+	Send(*PositionReportResponse) error
+	grpc.ServerStream
+}
+
+type operationsServicePositionReportServer struct {
+	grpc.ServerStream
+}
+
+func (x *operationsServicePositionReportServer) Send(m *PositionReportResponse) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 // OperationsService_ServiceDesc is the grpc.ServiceDesc for OperationsService service.
@@ -137,11 +163,13 @@ var OperationsService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "BuyByMarket",
 			Handler:    _OperationsService_BuyByMarket_Handler,
 		},
+	},
+	Streams: []grpc.StreamDesc{
 		{
-			MethodName: "PositionReport",
-			Handler:    _OperationsService_PositionReport_Handler,
+			StreamName:    "PositionReport",
+			Handler:       _OperationsService_PositionReport_Handler,
+			ServerStreams: true,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/operations.proto",
 }

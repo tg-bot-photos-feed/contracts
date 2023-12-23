@@ -34,5 +34,5 @@ message PositionReportResponse {
 
 service OperationsService {
 	rpc BuyByMarket (BuyByMarketRequest) returns (google.protobuf.Empty);
-	rpc PositionReport(PositionReportRequest) returns (PositionReportResponse);
+	rpc PositionReport(PositionReportRequest) returns (stream PositionReportResponse);
 }
