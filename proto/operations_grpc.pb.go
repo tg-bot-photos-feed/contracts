@@ -20,7 +20,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	OperationsService_BuyByMarket_FullMethodName = "/utbot.OperationsService/BuyByMarket"
+	OperationsService_BuyByMarket_FullMethodName    = "/utbot.OperationsService/BuyByMarket"
+	OperationsService_PositionReport_FullMethodName = "/utbot.OperationsService/PositionReport"
 )
 
 // OperationsServiceClient is the client API for OperationsService service.
@@ -28,6 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OperationsServiceClient interface {
 	BuyByMarket(ctx context.Context, in *BuyByMarketRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	PositionReport(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*PositionReportResponse, error)
 }
 
 type operationsServiceClient struct {
@@ -47,11 +49,21 @@ func (c *operationsServiceClient) BuyByMarket(ctx context.Context, in *BuyByMark
 	return out, nil
 }
 
+func (c *operationsServiceClient) PositionReport(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*PositionReportResponse, error) {
+	out := new(PositionReportResponse)
+	err := c.cc.Invoke(ctx, OperationsService_PositionReport_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OperationsServiceServer is the server API for OperationsService service.
 // All implementations must embed UnimplementedOperationsServiceServer
 // for forward compatibility
 type OperationsServiceServer interface {
 	BuyByMarket(context.Context, *BuyByMarketRequest) (*emptypb.Empty, error)
+	PositionReport(context.Context, *emptypb.Empty) (*PositionReportResponse, error)
 	mustEmbedUnimplementedOperationsServiceServer()
 }
 
@@ -61,6 +73,9 @@ type UnimplementedOperationsServiceServer struct {
 
 func (UnimplementedOperationsServiceServer) BuyByMarket(context.Context, *BuyByMarketRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BuyByMarket not implemented")
+}
+func (UnimplementedOperationsServiceServer) PositionReport(context.Context, *emptypb.Empty) (*PositionReportResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PositionReport not implemented")
 }
 func (UnimplementedOperationsServiceServer) mustEmbedUnimplementedOperationsServiceServer() {}
 
@@ -93,6 +108,24 @@ func _OperationsService_BuyByMarket_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OperationsService_PositionReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OperationsServiceServer).PositionReport(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OperationsService_PositionReport_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OperationsServiceServer).PositionReport(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OperationsService_ServiceDesc is the grpc.ServiceDesc for OperationsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -103,6 +136,10 @@ var OperationsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "BuyByMarket",
 			Handler:    _OperationsService_BuyByMarket_Handler,
+		},
+		{
+			MethodName: "PositionReport",
+			Handler:    _OperationsService_PositionReport_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

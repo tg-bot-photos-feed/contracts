@@ -12,6 +12,23 @@ message BuyByMarketRequest {
 	string account_id = 3;
 }
 
+
+//Баланс позиции ценной бумаги.
+message PositionsSecurities {
+	string figi = 1; //Figi-идентификатор бумаги.
+	int64 blocked = 2; //Количество бумаг заблокированных выставленными заявками.
+	int64 balance = 3;  //Текущий незаблокированный баланс.
+	string position_uid = 4; //Уникальный идентификатор позиции.
+	string instrument_uid = 5; //Уникальный идентификатор  инструмента.
+	bool exchange_blocked = 11; //Заблокировано на бирже.
+	string instrument_type = 16; //Тип инструмента.
+}
+
+message PositionReportResponse {
+	repeated PositionsSecurities securities = 1;
+}
+
 service OperationsService {
 	rpc BuyByMarket (BuyByMarketRequest) returns (google.protobuf.Empty);
+	rpc PositionReport(google.protobuf.Empty) returns (PositionReportResponse);
 }
