@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package utbot;
 
-import "google/protobuf/empty.proto";
-
 option go_package = "github.com/tg-bot-photos-feed/contracts";
 
 message BuyByMarketRequest {
@@ -32,7 +30,11 @@ message PositionReportResponse {
 	repeated PositionsSecurities securities = 1;
 }
 
+message BuyByMarketResponse {
+	string status = 1;
+}
+
 service OperationsService {
-	rpc BuyByMarket (BuyByMarketRequest) returns (google.protobuf.Empty);
-	rpc PositionReport(PositionReportRequest) returns (stream PositionReportResponse);
+	rpc BuyByMarket (BuyByMarketRequest) returns (BuyByMarketResponse);
+	rpc PositionReport (PositionReportRequest) returns (stream PositionReportResponse);
 }
