@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package utbot;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/tg-bot-photos-feed/contracts";
+
+message PrepareSandboxAccountRequest {
+	string token = 1;
+	int64 units = 2;
+}
+
+message PrepareSandboxAccountResponse {
+	string account_id = 1;
+}
+
+service SandboxService {
+	rpc PrepareSandboxAccount (PrepareSandboxAccountRequest) returns (PrepareSandboxAccountResponse);
+}
